@@ -57,17 +57,21 @@ local keys = {
    { key = 'c',          mods = 'CTRL|SHIFT',  action = act.CopyTo('Clipboard') },
    { key = 'v',          mods = 'CTRL|SHIFT',  action = act.PasteFrom('Clipboard') },
 
-   -- tabs --
-   -- tabs: spawn+close
-   { key = 't',          mods = mod.SUPER,     action = act.SpawnTab('DefaultDomain') },
-   { key = 't',          mods = mod.SUPER_REV, action = act.SpawnTab({ DomainName = 'wsl:ubuntu-fish' }) },
-   { key = 'w',          mods = mod.SUPER_REV, action = act.CloseCurrentTab({ confirm = false }) },
+    -- tabs --
+    -- tabs: spawn+close
+    { key = 't',          mods = mod.SUPER,     action = act.SpawnTab('DefaultDomain') },
+    { key = 't',          mods = mod.SUPER_REV, action = act.SpawnTab({ DomainName = 'wsl:ubuntu-fish' }) },
+    { key = 'w',          mods = mod.SUPER_REV, action = act.CloseCurrentTab({ confirm = false }) },
+    { key = 'c',          mods = 'LEADER',      action = act.SpawnTab('DefaultDomain') },
+    { key = 'n',          mods = 'LEADER',      action = act.ActivateTabRelative(1) },
+    { key = 'p',          mods = 'LEADER',      action = act.ActivateTabRelative(-1) },
+    { key = '&',          mods = 'LEADER|SHIFT', action = act.CloseCurrentTab({ confirm = false }) },
 
    -- tabs: navigation
-   { key = '[',          mods = mod.SUPER,     action = act.ActivateTabRelative(-1) },
-   { key = ']',          mods = mod.SUPER,     action = act.ActivateTabRelative(1) },
-   { key = '[',          mods = mod.SUPER_REV, action = act.MoveTabRelative(-1) },
-   { key = ']',          mods = mod.SUPER_REV, action = act.MoveTabRelative(1) },
+   { key = 'h',          mods = mod.SUPER_REV,     action = act.ActivateTabRelative(-1) },
+   { key = 'l',          mods = mod.SUPER_REV,     action = act.ActivateTabRelative(1) },
+   -- { key = '[',          mods = mod.SUPER_REV, action = act.MoveTabRelative(-1) },
+   -- { key = ']',          mods = mod.SUPER_REV, action = act.MoveTabRelative(1) },
 
    -- tab: title
    { key = '0',          mods = mod.SUPER,     action = act.EmitEvent('tabs.manual-update-tab-title') },
@@ -163,32 +167,42 @@ local keys = {
    },
 
    -- panes --
-   -- panes: split panes
-   {
-      key = [[\]],
-      mods = mod.SUPER,
-      action = act.SplitVertical({ domain = 'CurrentPaneDomain' }),
+    -- panes: split panes
+    {
+       key = [[\]],
+       mods = mod.SUPER,
+       action = act.SplitVertical({ domain = 'CurrentPaneDomain' }),
    },
-   {
-      key = [[\]],
-      mods = mod.SUPER_REV,
-      action = act.SplitHorizontal({ domain = 'CurrentPaneDomain' }),
-   },
+    {
+       key = [[\]],
+       mods = mod.SUPER_REV,
+       action = act.SplitHorizontal({ domain = 'CurrentPaneDomain' }),
+    },
+    { key = [[%]],        mods = 'LEADER|SHIFT', action = act.SplitHorizontal({ domain = 'CurrentPaneDomain' }) },
+    { key = [["]],        mods = 'LEADER|SHIFT', action = act.SplitVertical({ domain = 'CurrentPaneDomain' }) },
 
-   -- panes: zoom+close pane
-   { key = 'Enter', mods = mod.SUPER,     action = act.TogglePaneZoomState },
-   { key = 'w',     mods = mod.SUPER,     action = act.CloseCurrentPane({ confirm = false }) },
+    -- panes: zoom+close pane
+    { key = 'Enter', mods = mod.SUPER,     action = act.TogglePaneZoomState },
+    { key = 'w',     mods = mod.SUPER,     action = act.CloseCurrentPane({ confirm = false }) },
+    { key = 'x',     mods = 'LEADER',      action = act.CloseCurrentPane({ confirm = false }) },
+    { key = 'z',     mods = 'LEADER',      action = act.TogglePaneZoomState },
+    { key = '[',     mods = 'LEADER',      action = act.ActivateCopyMode },
+    { key = 'o',     mods = 'LEADER',      action = act.RotatePanes('Clockwise') },
 
-   -- panes: navigation
-   { key = 'k',     mods = mod.SUPER_REV, action = act.ActivatePaneDirection('Up') },
-   { key = 'j',     mods = mod.SUPER_REV, action = act.ActivatePaneDirection('Down') },
-   { key = 'h',     mods = mod.SUPER_REV, action = act.ActivatePaneDirection('Left') },
-   { key = 'l',     mods = mod.SUPER_REV, action = act.ActivatePaneDirection('Right') },
-   {
-      key = 'p',
-      mods = mod.SUPER_REV,
-      action = act.PaneSelect({ alphabet = '1234567890', mode = 'SwapWithActiveKeepFocus' }),
-   },
+    -- panes: navigation
+    { key = 'k',     mods = 'CTRL' , action = act.ActivatePaneDirection('Up') },
+    { key = 'j',     mods = 'CTRL' , action = act.ActivatePaneDirection('Down') },
+    { key = 'h',     mods = 'CTRL' , action = act.ActivatePaneDirection('Left') },
+    { key = 'l',     mods = 'CTRL' , action = act.ActivatePaneDirection('Right') },
+    { key = 'h',     mods = 'LEADER', action = act.ActivatePaneDirection('Left') },
+    { key = 'j',     mods = 'LEADER', action = act.ActivatePaneDirection('Down') },
+    { key = 'k',     mods = 'LEADER', action = act.ActivatePaneDirection('Up') },
+    { key = 'l',     mods = 'LEADER', action = act.ActivatePaneDirection('Right') },
+    {
+       key = 'p',
+       mods = mod.SUPER_REV,
+       action = act.PaneSelect({ alphabet = '1234567890', mode = 'SwapWithActiveKeepFocus' }),
+    },
 
    -- panes: scroll pane
    { key = 'u',        mods = mod.SUPER, action = act.ScrollByLine(-5) },
@@ -197,12 +211,17 @@ local keys = {
    { key = 'PageDown', mods = 'NONE',    action = act.ScrollByPage(0.75) },
 
    -- key-tables --
-   -- resizes fonts
-   {
-      key = 'f',
-      mods = 'LEADER',
-      action = act.ActivateKeyTable({
-         name = 'resize_font',
+    -- resizes fonts
+    {
+       key = 'b',
+       mods = 'LEADER',
+       action = act.SendKey({ key = 'b', mods = 'CTRL' }),
+    },
+    {
+       key = 'f',
+       mods = 'LEADER',
+       action = act.ActivateKeyTable({
+          name = 'resize_font',
          one_shot = false,
          timeout_milliseconds = 1000,
       }),
@@ -250,7 +269,7 @@ local mouse_bindings = {
 return {
    disable_default_key_bindings = true,
    -- disable_default_mouse_bindings = true,
-   leader = { key = 'Space', mods = mod.SUPER_REV },
+   leader = { key = 'b', mods = 'CTRL' },
    keys = keys,
    key_tables = key_tables,
    mouse_bindings = mouse_bindings,

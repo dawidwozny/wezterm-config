@@ -12,11 +12,11 @@ return {
    underline_thickness = '1.5pt',
 
    -- cursor
-   animation_fps = 120,
-   cursor_blink_ease_in = 'EaseOut',
-   cursor_blink_ease_out = 'EaseOut',
-   default_cursor_style = 'BlinkingBlock',
-   cursor_blink_rate = 650,
+   -- animation_fps = 120,
+   -- cursor_blink_ease_in = 'EaseOut',
+   -- cursor_blink_ease_out = 'EaseOut',
+   -- default_cursor_style = 'BlinkingBlock',
+   -- cursor_blink_rate = 650,
 
    -- color scheme
    colors = colors,
