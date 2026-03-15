@@ -210,6 +210,9 @@ local keys = {
    { key = 'PageUp',   mods = 'NONE',    action = act.ScrollByPage(-0.75) },
    { key = 'PageDown', mods = 'NONE',    action = act.ScrollByPage(0.75) },
 
+   -- reload config
+    { key = 'r', mods = 'LEADER', action = act.ReloadConfiguration },
+
    -- key-tables --
     -- resizes fonts
     {
