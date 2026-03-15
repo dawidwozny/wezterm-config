@@ -16,7 +16,29 @@ end
 -- stylua: ignore
 local keys = {
    -- misc/useful --
-   { key = 'F1', mods = 'NONE', action = 'ActivateCopyMode' },
+   { key = 'Space', mods = 'CTRL|SHIFT', action = act.QuickSelectArgs({
+      label = 'quick select',
+      patterns = {
+         -- file paths (unix & windows)
+         '[\\w.][-\\w./]+\\.\\w+[:\\d]*',
+         -- git hashes (7-40 hex chars)
+         '[0-9a-f]{7,40}',
+         -- urls
+         'https?://\\S+[)/a-zA-Z0-9-]+',
+         -- ipv4 addresses (with optional port)
+         '\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}[:\\d]*',
+         -- uuids
+         '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
+         -- hex colors
+         '#[0-9a-fA-F]{6,8}',
+         -- docker container ids (12+ hex)
+         '[0-9a-f]{12,64}',
+      },
+   }) },
+   { key = 'F1', mods = 'NONE', action = wezterm.action_callback(function(window, pane)
+      window:perform_action(act.ActivateCopyMode, pane)
+      window:perform_action(act.CopyMode('ClearSelectionMode'), pane)
+   end) },
    { key = 'F2', mods = 'NONE', action = act.ActivateCommandPalette },
    { key = 'F3', mods = 'NONE', action = act.ShowLauncher },
    { key = 'F4', mods = 'NONE', action = act.ShowLauncherArgs({ flags = 'FUZZY|TABS' }) },
@@ -186,7 +208,10 @@ local keys = {
     { key = 'w',     mods = mod.SUPER,     action = act.CloseCurrentPane({ confirm = false }) },
     { key = 'x',     mods = 'LEADER',      action = act.CloseCurrentPane({ confirm = false }) },
     { key = 'z',     mods = 'LEADER',      action = act.TogglePaneZoomState },
-    { key = '[',     mods = 'LEADER',      action = act.ActivateCopyMode },
+    { key = '[',     mods = 'LEADER',      action = wezterm.action_callback(function(window, pane)
+      window:perform_action(act.ActivateCopyMode, pane)
+      window:perform_action(act.CopyMode('ClearSelectionMode'), pane)
+   end) },
     { key = 'o',     mods = 'LEADER',      action = act.RotatePanes('Clockwise') },
 
     -- panes: navigation
@@ -258,7 +283,18 @@ local key_tables = {
       { key = 'Escape', action = 'PopKeyTable' },
       { key = 'q',      action = 'PopKeyTable' },
    },
+   search_mode = {
+      { key = 'Enter',  mods = 'NONE',       action = act.CopyMode('AcceptPattern') },
+      { key = 'Escape', mods = 'NONE',       action = act.CopyMode('Close') },
+   },
 }
+
+-- Extend default copy_mode with vim search bindings
+local copy_mode = wezterm.gui.default_key_tables().copy_mode
+table.insert(copy_mode, { key = '/',  mods = 'NONE',  action = act.Search('CurrentSelectionOrEmptyString') })
+table.insert(copy_mode, { key = 'n',  mods = 'NONE',  action = act.CopyMode('NextMatch') })
+table.insert(copy_mode, { key = 'N',  mods = 'SHIFT', action = act.CopyMode('PriorMatch') })
+table.insert(copy_mode, { key = 'Escape', mods = 'NONE', action = act.CopyMode('ClearSelectionMode') })key_tables.copy_mode = copy_mode
 
 local mouse_bindings = {
    -- Ctrl-click will open the link under the mouse cursor
