@@ -35,6 +35,13 @@ local keys = {
          '[0-9a-f]{12,64}',
       },
    }) },
+   { key = 'd', mods = 'CTRL|SHIFT', action = act.QuickSelectArgs({
+      label = 'docker image',
+      patterns = {
+         -- full docker image path (registry/path:tag)
+         '([a-zA-Z0-9][-a-zA-Z0-9.]*(?::[0-9]+)?/[-a-zA-Z0-9_.]+(?:/[-a-zA-Z0-9_.]+)*(?::[-a-zA-Z0-9_.]+)?)',
+      },
+   }) },
    { key = 'F1', mods = 'NONE', action = wezterm.action_callback(function(window, pane)
       window:perform_action(act.ActivateCopyMode, pane)
       window:perform_action(act.CopyMode('ClearSelectionMode'), pane)
