@@ -222,10 +222,36 @@ local keys = {
     { key = 'o',     mods = 'LEADER',      action = act.RotatePanes('Clockwise') },
 
     -- panes: navigation
-    { key = 'k',     mods = 'CTRL' , action = act.ActivatePaneDirection('Up') },
-    { key = 'j',     mods = 'CTRL' , action = act.ActivatePaneDirection('Down') },
-    { key = 'h',     mods = 'CTRL' , action = act.ActivatePaneDirection('Left') },
-    { key = 'l',     mods = 'CTRL' , action = act.ActivatePaneDirection('Right') },
+    -- Ctrl+hjkl: pass through to Neovim when in nvim, otherwise navigate WezTerm panes
+    -- Uses IS_NVIM user var set by Neovim on startup (reliable on Windows where process detection fails)
+    { key = 'k', mods = 'CTRL', action = wezterm.action_callback(function(window, pane)
+      if pane:get_user_vars().IS_NVIM == 'true' then
+        window:perform_action(act.SendKey({ key = 'k', mods = 'CTRL' }), pane)
+      else
+        window:perform_action(act.ActivatePaneDirection('Up'), pane)
+      end
+    end) },
+    { key = 'j', mods = 'CTRL', action = wezterm.action_callback(function(window, pane)
+      if pane:get_user_vars().IS_NVIM == 'true' then
+        window:perform_action(act.SendKey({ key = 'j', mods = 'CTRL' }), pane)
+      else
+        window:perform_action(act.ActivatePaneDirection('Down'), pane)
+      end
+    end) },
+    { key = 'h', mods = 'CTRL', action = wezterm.action_callback(function(window, pane)
+      if pane:get_user_vars().IS_NVIM == 'true' then
+        window:perform_action(act.SendKey({ key = 'h', mods = 'CTRL' }), pane)
+      else
+        window:perform_action(act.ActivatePaneDirection('Left'), pane)
+      end
+    end) },
+    { key = 'l', mods = 'CTRL', action = wezterm.action_callback(function(window, pane)
+      if pane:get_user_vars().IS_NVIM == 'true' then
+        window:perform_action(act.SendKey({ key = 'l', mods = 'CTRL' }), pane)
+      else
+        window:perform_action(act.ActivatePaneDirection('Right'), pane)
+      end
+    end) },
     { key = 'h',     mods = 'LEADER', action = act.ActivatePaneDirection('Left') },
     { key = 'j',     mods = 'LEADER', action = act.ActivatePaneDirection('Down') },
     { key = 'k',     mods = 'LEADER', action = act.ActivatePaneDirection('Up') },
