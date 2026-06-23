@@ -271,6 +271,16 @@ local keys = {
    -- reload config
     { key = 'r', mods = 'LEADER', action = act.ReloadConfiguration },
 
+   -- clear screen + scrollback (LEADER + Ctrl-l)
+    {
+       key = 'l',
+       mods = 'LEADER|CTRL',
+       action = act.Multiple({
+          act.ClearScrollback('ScrollbackAndViewport'),
+          act.SendKey({ key = 'L', mods = 'CTRL' }),
+       }),
+    },
+
    -- key-tables --
     -- resizes fonts
     {
